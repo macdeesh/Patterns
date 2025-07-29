@@ -1,0 +1,373 @@
+{
+  "Main Questions": {
+    "title": "PATTERNS – Compatibility Test",
+    "description": "This test includes all 20 questions from the Main Compatibility Pack, with 3 response options each to reveal emotional and relational patterns.",
+    "scoring": {
+      "good": 5,
+      "medium": 2.5,
+      "bad": 0
+    },
+    "questions": [
+      {
+        "id": 1,
+        "text": "When you're in a relationship, what does 'peace' look like to you?",
+        "options": [
+          {
+            "text": "I feel safe, soft, and deeply understood.",
+            "score": 5
+          },
+          {
+            "text": "No drama and fun vibes — we just vibe.",
+            "score": 2.5
+          },
+          {
+            "text": "No pressure or rules. I want full freedom.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "text": "If your partner asked you to open up about your past — every relationship, mistake, and moment you’re ashamed of — how would you respond?",
+        "options": [
+          {
+            "text": "I’d tell him everything. No masks.",
+            "score": 5
+          },
+          {
+            "text": "I’d tell some, but not all. He doesn’t need to know everything.",
+            "score": 2.5
+          },
+          {
+            "text": "I avoid that — it’s none of his business.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "text": "When you're emotionally triggered by something your partner says or does, what’s your default reaction?",
+        "options": [
+          {
+            "text": "I breathe and communicate calmly.",
+            "score": 5
+          },
+          {
+            "text": "I withdraw or sulk until he asks what’s wrong.",
+            "score": 2.5
+          },
+          {
+            "text": "I go cold, angry, or react fast.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "text": "What makes a man 'worthy' of your submission, softness, and loyalty?",
+        "options": [
+          {
+            "text": "His leadership, emotional presence, and consistency.",
+            "score": 5
+          },
+          {
+            "text": "Chemistry and how he treats me short-term.",
+            "score": 2.5
+          },
+          {
+            "text": "Nothing — I don’t submit.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "text": "How do you respond when someone confronts you about something you did wrong — gently, but honestly?",
+        "options": [
+          {
+            "text": "I thank them and reflect immediately.",
+            "score": 5
+          },
+          {
+            "text": "I get a bit defensive, but process it later.",
+            "score": 2.5
+          },
+          {
+            "text": "I argue back or deflect blame.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "text": "How many times have you truly given your heart to someone — with full honesty, vulnerability, and loyalty?",
+        "options": [
+          {
+            "text": "Once or twice — and I meant it fully.",
+            "score": 5
+          },
+          {
+            "text": "A few times — but I held back parts of me.",
+            "score": 2.5
+          },
+          {
+            "text": "I don't believe in full emotional exposure.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "text": "How do you personally define loyalty in a relationship?",
+        "options": [
+          {
+            "text": "Emotional + sexual exclusivity, full transparency.",
+            "score": 5
+          },
+          {
+            "text": "No cheating, but I still keep some privacy.",
+            "score": 2.5
+          },
+          {
+            "text": "As long as I come back home, I’m loyal.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "text": "If your partner asked you to cut off male friends who have flirted with you before, how would you react?",
+        "options": [
+          {
+            "text": "I’d do it without hesitation — respect first.",
+            "score": 5
+          },
+          {
+            "text": "I’d explain they’re just friends, but limit contact.",
+            "score": 2.5
+          },
+          {
+            "text": "No man tells me who I can or can't talk to.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "text": "Are you open to submitting to a man who leads with love, strength, and purpose?",
+        "options": [
+          {
+            "text": "Yes — it makes me feel safe and feminine.",
+            "score": 5
+          },
+          {
+            "text": "It depends how strong the bond is.",
+            "score": 2.5
+          },
+          {
+            "text": "No — I lead myself.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "text": "How do you usually express love physically?",
+        "options": [
+          {
+            "text": "Through touch, softness, and attentive care.",
+            "score": 5
+          },
+          {
+            "text": "I show it when I feel in the mood.",
+            "score": 2.5
+          },
+          {
+            "text": "I prefer emotional or mental connection.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 11,
+        "text": "What’s your relationship with your father like?",
+        "options": [
+          {
+            "text": "Loving, respectful, and consistent.",
+            "score": 5
+          },
+          {
+            "text": "Complicated — ups and downs.",
+            "score": 2.5
+          },
+          {
+            "text": "Distant, painful, or absent.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 12,
+        "text": "Would you be open to adapting your lifestyle to match your partner’s faith or culture?",
+        "options": [
+          {
+            "text": "Yes — if I love him, I’ll honor his values.",
+            "score": 5
+          },
+          {
+            "text": "Possibly — if it doesn’t change who I am.",
+            "score": 2.5
+          },
+          {
+            "text": "No — I won’t change for anyone.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 13,
+        "text": "How do you feel about sexual exploration (kinks, domination, toys, power dynamics, etc.) with someone you trust?",
+        "options": [
+          {
+            "text": "Very open — I love exploring with my man.",
+            "score": 5
+          },
+          {
+            "text": "I’m curious but have limits.",
+            "score": 2.5
+          },
+          {
+            "text": "That’s not for me — I like to keep it simple.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 14,
+        "text": "Be real — what’s your view on body count and how it affects relationships?",
+        "options": [
+          {
+            "text": "It matters — fewer bonds = more purity of love.",
+            "score": 5
+          },
+          {
+            "text": "It depends on the person’s growth.",
+            "score": 2.5
+          },
+          {
+            "text": "It’s irrelevant — past is past.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 15,
+        "text": "What does “home” mean to you in a relationship?",
+        "options": [
+          {
+            "text": "Safety, routine, warmth, and care.",
+            "score": 5
+          },
+          {
+            "text": "Shared experiences and excitement.",
+            "score": 2.5
+          },
+          {
+            "text": "No attachment — I’m my own home.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 16,
+        "text": "How would you describe your social energy?",
+        "options": [
+          {
+            "text": "Mostly private, intimate circles only.",
+            "score": 5
+          },
+          {
+            "text": "Socially open but need space often.",
+            "score": 2.5
+          },
+          {
+            "text": "Very outgoing — I need attention often.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 17,
+        "text": "How do you react when you don’t feel desired by your partner?",
+        "options": [
+          {
+            "text": "I express it with love and ask how we can reconnect.",
+            "score": 5
+          },
+          {
+            "text": "I pull away emotionally until he notices.",
+            "score": 2.5
+          },
+          {
+            "text": "I seek attention elsewhere — emotionally or physically.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 18,
+        "text": "Do you think jealousy is healthy in a relationship?",
+        "options": [
+          {
+            "text": "A little — it shows care and boundaries.",
+            "score": 5
+          },
+          {
+            "text": "Only if it’s balanced and rare.",
+            "score": 2.5
+          },
+          {
+            "text": "No — it’s toxic and controlling.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 19,
+        "text": "When you start feeling deep love for someone, what scares you the most?",
+        "options": [
+          {
+            "text": "Losing them or not being enough.",
+            "score": 5
+          },
+          {
+            "text": "Losing my freedom or identity.",
+            "score": 2.5
+          },
+          {
+            "text": "Being controlled, vulnerable, or too soft.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "id": 20,
+        "text": "What does being 'a good woman' mean to you — beyond career or looks?",
+        "options": [
+          {
+            "text": "Kind, loyal, nurturing, emotionally wise.",
+            "score": 5
+          },
+          {
+            "text": "Fun, ambitious, open-minded.",
+            "score": 2.5
+          },
+          {
+            "text": "Fierce, dominant, independent.",
+            "score": 0
+          }
+        ]
+      }
+    ]
+  }
+}
