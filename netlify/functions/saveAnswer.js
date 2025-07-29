@@ -5,7 +5,18 @@ exports.handler = async function (event) {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
-  const { userData } = JSON.parse(event.body);
+  let userData;
+  try {
+    const body = JSON.parse(event.body);
+    userData = body.userData;
+
+    if (!userData || typeof userData !== "object") {
+      return { statusCode: 400, body: "Invalid user data" };
+    }
+  } catch (err) {
+    return { statusCode: 400, body: "Invalid JSON" };
+  }
+
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   const REPO_OWNER = "macdeesh";
   const REPO_NAME = "Patterns";
@@ -15,7 +26,6 @@ exports.handler = async function (event) {
   const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
   try {
-    // Get current file contents and SHA
     let currentContent = "";
     let sha = null;
 
@@ -38,15 +48,16 @@ exports.handler = async function (event) {
       data = JSON.parse(currentContent);
     }
 
-    data.push(userData); // append new entry
+    data.push(userData);
 
     const updatedContent = Buffer.from(JSON.stringify(data, null, 2)).toString("base64");
+    const timestamp = new Date().toISOString();
 
     await octokit.repos.createOrUpdateFileContents({
       owner: REPO_OWNER,
       repo: REPO_NAME,
       path: FILE_PATH,
-      message: "Add new answer",
+      message: `Add new answer at ${timestamp}`,
       content: updatedContent,
       sha: sha || undefined,
       branch: BRANCH,
@@ -57,7 +68,7 @@ exports.handler = async function (event) {
       body: JSON.stringify({ success: true }),
     };
   } catch (error) {
-    console.error(error);
+    console.error("GitHub error:", error.response?.data || error.message);
     return {
       statusCode: 500,
       body: JSON.stringify({ error: "Failed to save answer" }),
