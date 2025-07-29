@@ -58,7 +58,7 @@ function startQuiz() {
 
 async function loadQuestions() {
   try {
-    const res = await fetch('config/questions.json')
+    const res = await fetch('/data/questions.json')
     const data = await res.json()
 
     const category = data['Main Questions']
