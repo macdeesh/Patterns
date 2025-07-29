@@ -11,8 +11,42 @@ quizContainer.id = 'screen-quiz'
 quizContainer.className = 'screen'
 document.body.appendChild(quizContainer)
 
+// ============ NETLIFY ============
+async function fetchAnswers() {
+  const res = await fetch('/.netlify/functions/getAnswers');
+  const data = await res.json();
+  console.log(data);
+}
+
+async function saveAnswer(newAnswer) {
+  await fetch('/.netlify/functions/saveAnswer', {
+    method: 'POST',
+    body: JSON.stringify(newAnswer),
+  });
+}
+
+async function deleteAnswers() {
+  try {
+    const response = await fetch('/.netlify/functions/deleteAnswers', {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to delete answers.');
+    }
+
+    const result = await response.json();
+    console.log('Answers deleted:', result.message || result);
+    alert('All answers have been deleted.');
+  } catch (error) {
+    console.error('Error deleting answers:', error);
+    alert('Something went wrong while deleting answers.');
+  }
+}
+
 // ============ EVENT LISTENERS ============
 startBtn.addEventListener('click', startQuiz)
+document.getElementById('delete-btn').addEventListener('click', deleteAnswers);
 
 // ============ MAIN FUNCTIONS ============
 
