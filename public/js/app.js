@@ -11,44 +11,8 @@ quizContainer.id = 'screen-quiz'
 quizContainer.className = 'screen'
 document.body.appendChild(quizContainer)
 
-// ============ NETLIFY ============
-async function fetchAnswers() {
-  const res = await fetch('/.netlify/functions/getAnswers');
-  const data = await res.json();
-  console.log(data);
-}
-
-async function saveAnswer(newAnswer) {
-  await fetch('/.netlify/functions/saveAnswer', {
-    method: 'POST',
-    body: JSON.stringify(newAnswer),
-  });
-}
-
-async function deleteAnswers() {
-  try {
-    const response = await fetch('/.netlify/functions/deleteAnswers', {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) {
-      throw new Error('Failed to delete answers.');
-    }
-
-    const result = await response.json();
-    console.log('Answers deleted:', result.message || result);
-    alert('All answers have been deleted.');
-  } catch (error) {
-    console.error('Error deleting answers:', error);
-    alert('Something went wrong while deleting answers.');
-  }
-}
-
 // ============ EVENT LISTENERS ============
 startBtn.addEventListener('click', startQuiz)
-document.getElementById('delete-btn').addEventListener('click', deleteAnswers);
-
-// ============ MAIN FUNCTIONS ============
 
 function startQuiz() {
   onboardingScreen.classList.remove('active')
@@ -58,7 +22,7 @@ function startQuiz() {
 
 async function loadQuestions() {
   try {
-    const res = await fetch('/data/questions.json')
+    const res = await fetch('data/questions.json')
     const data = await res.json()
 
     const category = data['Main Questions']
@@ -129,12 +93,56 @@ function finishQuiz() {
     contactPrompt.innerHTML = `
       <p>Looks like a strong match! Want to connect?</p>
       <input type="text" placeholder="Your Instagram or contact" id="contact-field" />
-      <button onclick="saveContact()">Send</button>
+      <button id="send-contact-btn">Send</button>
     `
     result.appendChild(contactPrompt)
   }
 
+  const actions = document.createElement('div')
+  actions.className = 'final-actions'
+  actions.innerHTML = `
+    <button id="start-again-btn">Start Again</button>
+    <button id="login-btn">Admin Login</button>
+  `
+  result.appendChild(actions)
+
   quizContainer.appendChild(result)
+
+  // Listeners
+  document.getElementById('start-again-btn').addEventListener('click', () => {
+    if (confirm('Restart the quiz?')) {
+      location.reload()
+    }
+  })
+
+  document.getElementById('login-btn').addEventListener('click', () => {
+    const pass = prompt('Enter password:')
+    if (pass === 'karim') {
+      loadAdminView()
+    } else {
+      alert('Incorrect password.')
+    }
+  })
+
+  const sendBtn = document.getElementById('send-contact-btn')
+  if (sendBtn) {
+    sendBtn.addEventListener('click', () => {
+      const contact = document.getElementById('contact-field').value
+      if (!contact) return alert('Please enter your contact.')
+
+      const entry = {
+        contact,
+        compatibility: percent,
+        answers: questions.map((q, i) => q.text),
+        timestamp: new Date().toISOString(),
+      }
+
+      saveAnswer(entry).then(() => {
+        const parent = sendBtn.parentElement
+        parent.innerHTML = `<p>Saved successfully ✅</p>`
+      })
+    })
+  }
 }
 
 function getCompatibilityMessage(percent) {
@@ -144,14 +152,84 @@ function getCompatibilityMessage(percent) {
   return 'Low compatibility. Might not align.'
 }
 
-function saveContact() {
-  const contact = document.getElementById('contact-field').value
-  if (!contact) return alert('Please enter your contact.')
-  const timestamp = new Date().toISOString()
-  const contactData = { contact, compatibility: totalScore, timestamp }
+// ============ NETLIFY FUNCTIONS ============
 
-  // Log for now - replace with actual storage call later
-  console.log('Contact info saved:', contactData)
+async function saveAnswer(data) {
+  return await fetch('/.netlify/functions/saveAnswer', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+}
 
-  // TODO: Save contactData to JSON file via server/API/github backend
+async function deleteAnswers() {
+  try {
+    const res = await fetch('/.netlify/functions/deleteAnswers', {
+      method: 'DELETE',
+    })
+
+    if (!res.ok) throw new Error('Failed to delete.')
+
+    alert('Answers deleted.')
+    loadAdminView()
+  } catch (err) {
+    alert('Error deleting answers.')
+    console.error(err)
+  }
+}
+
+async function fetchAnswers() {
+  const res = await fetch('/.netlify/functions/getAnswers')
+  return await res.json()
+}
+
+// ============ ADMIN VIEW ============
+
+async function loadAdminView() {
+  document.body.innerHTML = `
+    <section id="admin-screen" class="screen active">
+      <h2>Admin Panel</h2>
+      <div id="answers-list"><p>Loading...</p></div>
+      <div class="admin-actions">
+        <button id="save-data-btn">Save</button>
+        <button id="delete-data-btn">Erase</button>
+        <button id="exit-admin-btn">Exit</button>
+      </div>
+    </section>
+  `
+
+  const data = await fetchAnswers()
+
+  const list = document.getElementById('answers-list')
+  list.innerHTML = ''
+
+  if (!data.answers || !Array.isArray(data.answers)) {
+    list.innerHTML = '<p>No data found.</p>'
+    return
+  }
+
+  data.answers.forEach((entry, i) => {
+    const el = document.createElement('div')
+    el.className = 'admin-entry'
+    el.innerHTML = `
+      <h4>Entry #${i + 1}</h4>
+      <p><strong>Contact:</strong> ${entry.contact || 'N/A'}</p>
+      <p><strong>Compatibility:</strong> ${entry.compatibility || 'N/A'}%</p>
+      <p><strong>Saved on:</strong> ${new Date(entry.timestamp).toLocaleString()}</p>
+      <hr/>
+    `
+    list.appendChild(el)
+  })
+
+  document.getElementById('delete-data-btn').addEventListener('click', () => {
+    const confirmed = confirm('Are you sure?')
+    if (confirmed) deleteAnswers()
+  })
+
+  document.getElementById('save-data-btn').addEventListener('click', () => {
+    alert('Data saved (Netlify repo stores the file).')
+  })
+
+  document.getElementById('exit-admin-btn').addEventListener('click', () => {
+    location.reload()
+  })
 }
