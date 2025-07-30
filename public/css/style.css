@@ -60,3 +60,75 @@ button:hover {
   color: #777;
   text-align: center;
 }
+
+/* Custom Radio Options */
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 1rem 0;
+}
+
+.answer-option {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.answer-option:hover {
+  background-color: #f5f5f5;
+}
+
+.answer-option.selected {
+  border-color: #333;
+  background-color: #f0f0f0;
+  font-weight: 500;
+}
+
+/* Hidden radio */
+.answer-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* Custom radio dot */
+.radio-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #999;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 12px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.answer-option.selected .radio-custom {
+  border-color: #333;
+}
+
+.answer-option.selected .radio-custom::after {
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #333;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Answer text */
+.answer-text {
+  font-size: 1rem;
+  color: #333;
+  flex: 1;
+}
