@@ -34,10 +34,14 @@ async function loadQuestions() {
     if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     const data = await res.json();
 
-    // ✅ Use "Main Questions" directly (matches your file)
-    const category = data['Main Questions'];
-    if (!category || !Array.isArray(category.questions)) {
-      throw new Error('Main Questions not found or invalid format');
+    // ✅ Correct: Find "Main Questions" inside categories array
+    const category = data.categories?.find(cat => cat.title === "Main Questions");
+    if (!category) {
+      throw new Error(`Category "Main Questions" not found. Available: ${data.categories?.map(c => c.title).join(', ') || 'None'}`);
+    }
+
+    if (!Array.isArray(category.questions)) {
+      throw new Error('Questions not found or invalid format');
     }
 
     questions = category.questions;
