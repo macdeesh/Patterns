@@ -1,67 +1,95 @@
+/* === GLOBAL RESET & FONT === */
 * {
   box-sizing: border-box;
-  font-family: system-ui, sans-serif;
   margin: 0;
   padding: 0;
 }
 
+/* === GOOGLE FONT IMPORT === */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
 body {
-  background: #f9f9f9;
-  color: #333;
+  background-color: #171217;
+  color: white;
+  font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  padding: 2rem;
+  padding: 60px 20px;
+  line-height: 1.5;
 }
 
+/* === SCREEN CONTAINER === */
 .screen {
   width: 100%;
   max-width: 500px;
   display: none;
   flex-direction: column;
   gap: 1.5rem;
-  margin-top: 3rem;
 }
 
 .screen.active {
   display: flex;
 }
 
-h1 {
-  font-size: 2rem;
-  text-align: center;
+/* === TITLES & TEXT === */
+h1, h2 {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  text-align: left;
+  margin-bottom: 0.5rem;
+  color: white;
 }
 
 p {
-  text-align: center;
-  font-size: 1rem;
-  color: #555;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+  text-align: left;
 }
 
+/* === BUTTONS === */
 button {
   padding: 0.75rem 1.5rem;
-  background-color: #333;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  background-color: #D687D1;
+  color: #171217;
+  border: 1px solid #D687D1;
+  border-radius: 12px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
 }
 
-button:hover {
-  background-color: #111;
+button:hover, button:focus {
+  background-color: #c76db8;
+  border-color: #c76db8;
 }
 
-.config-placeholder {
-  font-style: italic;
-  color: #777;
-  text-align: center;
+button:active {
+  transform: scale(0.98);
 }
 
-/* Custom Radio Options */
+/* === "Next" Button Full Width === */
+#next-btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 18px;
+}
+
+#next-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #555;
+  border-color: #555;
+}
+
+/* === Answer Buttons (Radio Options) === */
 .options {
   display: flex;
   flex-direction: column;
@@ -73,7 +101,7 @@ button:hover {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  border: 1px solid #ddd;
+  border: 1px solid #4f404d;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -81,16 +109,15 @@ button:hover {
 }
 
 .answer-option:hover {
-  background-color: #f5f5f5;
+  border-color: #D687D1;
 }
 
 .answer-option.selected {
-  border-color: #333;
-  background-color: #f0f0f0;
-  font-weight: 500;
+  border-color: white;
+  background-color: rgba(214, 135, 209, 0.1);
 }
 
-/* Hidden radio */
+/* Hidden radio input */
 .answer-option input[type="radio"] {
   position: absolute;
   opacity: 0;
@@ -98,20 +125,21 @@ button:hover {
   height: 0;
 }
 
-/* Custom radio dot */
+/* Custom Radio Dot */
 .radio-custom {
   width: 20px;
   height: 20px;
-  border: 2px solid #999;
+  border: 2px solid #4f404d;
   border-radius: 50%;
   display: inline-block;
   margin-right: 12px;
   position: relative;
   flex-shrink: 0;
+  transition: border-color 0.2s ease;
 }
 
 .answer-option.selected .radio-custom {
-  border-color: #333;
+  border-color: white;
 }
 
 .answer-option.selected .radio-custom::after {
@@ -119,17 +147,112 @@ button:hover {
   position: absolute;
   width: 10px;
   height: 10px;
-  background: #333;
+  background: white;
   border-radius: 50%;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-/* Answer text */
+/* Answer Text */
 .answer-text {
-  font-size: 1rem;
-  color: #333;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
   flex: 1;
 }
-/* deploy trigger */
+
+/* === FINAL SCREEN / RESULT PAGE === */
+.result-screen {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Contact Input & Button Group */
+#contact-input,
+#save-contact-btn {
+  height: 48px;
+  margin: 0;
+  padding: 0.75rem;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+}
+
+#contact-input {
+  background-color: #362B33;
+  color: #B2A3B2;
+  border: none;
+  border-radius: 12px 0 0 12px;
+  flex: 1;
+  outline: none;
+}
+
+#contact-input:focus {
+  outline: 1px solid #D687D1;
+}
+
+#save-contact-btn {
+  background-color: #D687D1;
+  color: #171217;
+  border: 1px solid #D687D1;
+  border-radius: 0 12px 12px 0;
+  font-weight: 600;
+}
+
+#save-contact-btn:hover {
+  background-color: #c76db8;
+  border-color: #c76db8;
+}
+
+/* Final Actions: Dashboard & Restart */
+.final-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+.final-actions button:first-child {
+  background-color: #362B33;
+  color: white;
+  border: 1px solid #555;
+}
+
+.final-actions button:first-child:hover {
+  background-color: #4a3d46;
+  border-color: #777;
+}
+
+/* === ADMIN DASHBOARD STYLES (Placeholder - We'll style next) === */
+#admin-screen {
+  background-color: #171217;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #4f404d;
+}
+
+#answers-list {
+  margin: 1rem 0;
+  font-size: 14px;
+}
+
+.admin-entry {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #4f404d;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 1rem;
+}
+
+#exit-admin-btn {
+  background-color: #362B33;
+  color: white;
+  border: 1px solid #555;
+}
