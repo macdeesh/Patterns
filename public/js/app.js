@@ -168,54 +168,61 @@ function finishQuiz() {
   resultDiv.appendChild(messageEl);
 
   // Contact input (only if high compatibility)
-  if (percent >= 75) {
-    const contactSection = document.createElement('div');
-    contactSection.innerHTML = `
-      <p>Looks like a strong match! Want to connect?</p>
-      <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
-    `;
-    resultDiv.appendChild(contactSection);
+  // Contact input (only if high compatibility)
+if (percent >= 75) {
+  const contactSection = document.createElement('div');
+  contactSection.innerHTML = `
+    <p>Looks like a strong match! Want to connect?</p>
+    <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
+  `;
+  resultDiv.appendChild(contactSection);
 
-    const contactInput = document.getElementById('contact-input');
+  const contactInput = document.getElementById('contact-input');
 
-    const saveBtn = document.createElement('button');
-    saveBtn.textContent = 'Save Contact';
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = 'Save Contact';
 
-    // ✅ Safe event listener: no reliance on getElementById after innerHTML
-    saveBtn.addEventListener('click', () => {
-      const contact = contactInput.value.trim();
-      if (!contact) return alert('Please enter your contact.');
+  saveBtn.addEventListener('click', () => {
+    const contact = contactInput.value.trim();
+    if (!contact) return alert('Please enter your contact.');
 
-      const entry = {
-        contact,
-        compatibility: percent,
-        answers: userAnswers,
-        timestamp: new Date().toISOString()
-      };
+    const entry = {
+      contact,
+      compatibility: percent,
+      answers: userAnswers,
+      timestamp: new Date().toISOString()
+    };
 
-      saveAnswer(entry)
-        .then(res => {
-          // Handle non-JSON responses gracefully
-          const contentType = res.headers.get('content-type');
-          return contentType && contentType.includes('application/json') ? res.json() : {};
-        })
-        .then(data => {
-          if (data.success !== false) {
-            alert('Contact saved!');
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Saved ✅';
-          } else {
-            alert('Failed to save.');
-          }
-        })
-        .catch(err => {
-          console.error('Save error:', err);
-          alert('Error saving. Please try again.');
-        });
-    });
+    saveAnswer(entry)
+      .then(res => {
+        const contentType = res.headers.get('content-type');
+        return contentType && contentType.includes('application/json') ? res.json() : {};
+      })
+      .then(data => {
+        if (data.success !== false) {
+          // ✅ Hide input and button
+          contactInput.style.display = 'none';
+          saveBtn.style.display = 'none';
 
-    resultDiv.appendChild(saveBtn);
-  }
+          // ✅ Show success message
+          const successMsg = document.createElement('p');
+          successMsg.textContent = 'Thank you, your contact is saved. ✅';
+          successMsg.style.fontWeight = '500';
+          successMsg.style.color = '#2e7d32';
+          successMsg.style.marginTop = '16px';
+          contactSection.appendChild(successMsg);
+        } else {
+          alert('Failed to save. Try again.');
+        }
+      })
+      .catch(err => {
+        console.error('Save error:', err);
+        alert('Error saving. Please try again.');
+      });
+  });
+
+  resultDiv.appendChild(saveBtn);
+}
 
   // Final buttons container
   const buttonContainer = document.createElement('div');
