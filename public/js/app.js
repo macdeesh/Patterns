@@ -269,17 +269,31 @@ async function saveAnswer(data) {
 }
 
 async function fetchAnswers() {
-  const res = await fetch('/api/getAnswers?password=<PASSWORD>');
-  if (!res.ok) throw new Error('Failed to fetch answers');
+  const password = 'karim';
+  const res = await fetch(`/api/getAnswers?password=${password}`);
+  
+  if (!res.ok) {
+    const text = await res.text();
+    console.error('getAnswers error:', res.status, text);
+    throw new Error(`Failed to fetch answers: ${res.status}`);
+  }
+  
   return await res.json();
 }
 
 // ============ ADMIN DASHBOARD ============
 async function showAdminDashboard() {
+  // Define password once
+  const password = 'karim';
+
+  // Hide all screens
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  
+  // Remove existing admin screen if present
   const existing = document.getElementById('admin-screen');
   if (existing) existing.remove();
 
+  // Create admin screen
   const adminScreen = document.createElement('section');
   adminScreen.id = 'admin-screen';
   adminScreen.className = 'screen active';
@@ -294,47 +308,63 @@ async function showAdminDashboard() {
   document.body.appendChild(adminScreen);
 
   const list = document.getElementById('answers-list');
+
   try {
-    const data = await fetchAnswers();
+    const data = await fetchAnswers(); // Uses password internally
     list.innerHTML = '';
 
     if (!data?.answers?.length) {
       list.innerHTML = '<p>No responses saved yet.</p>';
     } else {
       data.answers.forEach((entry, i) => {
-        const el = document.createElement('div');
-        el.className = 'admin-entry';
+        const entryEl = document.createElement('div');
+        entryEl.className = 'admin-entry';
+
         let answersHtml = '';
         entry.answers.forEach(ans => {
-          answersHtml += `<li><strong>${truncate(ans.question, 60)}</strong><br>→ ${ans.answer} (${ans.score} pts)</li>`;
+          answersHtml += `
+            <li><strong>${truncate(ans.question, 60)}</strong><br>→ ${ans.answer} <em>(${ans.score} pts)</em></li>
+          `;
         });
-        el.innerHTML = `
-          <h4>Entry #${i + 1} – ${entry.compatibility}%</h4>
+
+        entryEl.innerHTML = `
+          <h4>Response #${i + 1} – ${entry.compatibility}%</h4>
           <p><strong>Contact:</strong> ${entry.contact || 'N/A'}</p>
           <p><strong>Date:</strong> ${new Date(entry.timestamp).toLocaleString()}</p>
-          <details><summary>View Answers</summary><ol>${answersHtml}</ol></details>
+          <details>
+            <summary>View Full Answers</summary>
+            <ol>${answersHtml}</ol>
+          </details>
           <hr>
         `;
-        list.appendChild(el);
+        list.appendChild(entryEl);
       });
     }
   } catch (err) {
-    list.innerHTML = '<p>Error loading data.</p>';
+    list.innerHTML = '<p>Error loading data. Check console.</p>';
     console.error(err);
   }
 
+  // Delete button
   document.getElementById('delete-data-btn').addEventListener('click', async () => {
     if (confirm('Erase all responses?')) {
       try {
-        await fetch('/api/deleteAnswers?password=<PASSWORD>', { method: 'DELETE' });
+        const res = await fetch(`/api/deleteAnswers?password=${password}`, {
+          method: 'DELETE'
+        });
+
+        if (!res.ok) throw new Error('Delete failed');
+
         alert('All data erased.');
         location.reload();
       } catch (err) {
-        alert('Delete failed.');
+        alert('Failed to delete.');
+        console.error(err);
       }
     }
   });
 
+  // Exit button
   document.getElementById('exit-admin-btn').addEventListener('click', () => {
     location.reload();
   });
