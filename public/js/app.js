@@ -174,6 +174,7 @@ function finishQuiz() {
 
   
   // Contact input (only if high compatibility)
+// Contact input (only if high compatibility)
 if (percent >= 75) {
   const contactSection = document.createElement('div');
   contactSection.innerHTML = `
@@ -191,14 +192,14 @@ if (percent >= 75) {
     const contact = contactInput.value.trim();
     if (!contact) return alert('Please enter your contact.');
 
-    // ✅ Save in memory
+    // ✅ Store contact
     userContact = contact;
 
     // ✅ Hide input and button
     contactInput.style.display = 'none';
     saveBtn.style.display = 'none';
 
-    // ✅ Show success message
+    // ✅ Create and append success message
     const successMsg = document.createElement('p');
     successMsg.textContent = 'Thank you, your contact is saved. ✅';
     successMsg.style.fontWeight = '500';
@@ -207,6 +208,7 @@ if (percent >= 75) {
     contactSection.appendChild(successMsg);
   });
 
+  // ✅ Append button after event listener
   resultDiv.appendChild(saveBtn);
 }
 
