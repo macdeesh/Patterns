@@ -1,0 +1,14 @@
+{
+	"geolocation": {
+		"data": {
+			"country": {
+				"code": "ID",
+				"name": "Indonesia"
+			},
+			"timezone": "Asia/Jakarta",
+			"latitude": -6.175,
+			"longitude": 106.8286
+		},
+		"timestamp": 1753867212568
+	}
+}
