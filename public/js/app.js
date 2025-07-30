@@ -294,26 +294,24 @@ async function fetchAnswers() {
 
 // ============ ADMIN DASHBOARD ============
 async function showAdminDashboard() {
-  // Hide current screen
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   
-  let adminScreen = document.getElementById('admin-screen');
-  if (!adminScreen) {
-    adminScreen = document.createElement('section');
-    adminScreen.id = 'admin-screen';
-    adminScreen.className = 'screen active';
-    adminScreen.innerHTML = `
-      <h2>Admin Dashboard</h2>
-      <div id="answers-list"><p>Loading responses...</p></div>
-      <div class="admin-actions">
-        <button id="delete-data-btn">Erase All</button>
-        <button id="exit-admin-btn">Exit</button>
-      </div>
-    `;
-    document.body.appendChild(adminScreen);
-  } else {
-    adminScreen.classList.add('active');
-  }
+  // Remove any existing admin screen
+  const existing = document.getElementById('admin-screen');
+  if (existing) existing.remove();
+
+  const adminScreen = document.createElement('section');
+  adminScreen.id = 'admin-screen';
+  adminScreen.className = 'screen active';
+  adminScreen.innerHTML = `
+    <h2>Admin Dashboard</h2>
+    <div id="answers-list"><p>Loading responses...</p></div>
+    <div class="admin-actions">
+      <button id="delete-data-btn">Erase All</button>
+      <button id="exit-admin-btn">Exit</button>
+    </div>
+  `;
+  document.body.appendChild(adminScreen);
 
   const list = document.getElementById('answers-list');
   try {
@@ -352,7 +350,6 @@ async function showAdminDashboard() {
     console.error(err);
   }
 
-  // Delete button
   document.getElementById('delete-data-btn').addEventListener('click', async () => {
     if (confirm('Erase all responses?')) {
       try {
