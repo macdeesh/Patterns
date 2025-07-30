@@ -1,7 +1,15 @@
 {
-  "name": "netlify-github-json-api",
+  "name": "patterns",
   "version": "1.0.0",
-  "dependencies": {
-    "@octokit/rest": "^20.0.0"
-  }
+  "description": "**Patterns** is a lightweight browser-based app designed to evaluate compatibility between two people, based on how one person (User B) answers a set of predefined questions created by another (User A).",
+  "main": "index.js",
+  "bin": {
+    "patterns": "bin/script.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
