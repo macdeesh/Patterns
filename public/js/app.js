@@ -268,8 +268,8 @@ function showAdminDashboard() {
   adminScreen.className = 'screen active';
   adminScreen.innerHTML = `
     <h2>Quiz Review</h2>
-    <p><strong>Compatibility:</strong> ${Math.round((totalScore / (questions.length * 5)) * 100)}%</p>
-    ${userContact ? `<p><strong>Contact:</strong> ${userContact}</p>` : ''}
+    <p><strong>Compatibility:</strong> <span style="color: #D687D1;">${Math.round((totalScore / (questions.length * 5)) * 100)}%</span></p>
+    ${userContact ? `<p><strong>Contact:</strong> <span style="color: #00a4ff;">${userContact}</span></p>` : ''}
     <div id="answers-list">
       <p><strong>Answers:</strong></p>
       <br>

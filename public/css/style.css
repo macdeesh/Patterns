@@ -392,9 +392,6 @@ button:active {
 }
 
 #answers-list {
-  max-height: 70vh;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   padding: 16px 0;
 }
 
