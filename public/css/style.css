@@ -7,7 +7,6 @@
   padding: 0;
 }
 
-
 body {
   background-color: #171217;
   color: white;
@@ -28,7 +27,10 @@ body {
   width: 100%;
   display: none;
   flex-direction: column;
-  gap:10px;
+  gap: 10px;
+}
+.screen.active {
+  display: flex;
 }
 
 #screen-onboarding .logo {
@@ -36,29 +38,25 @@ body {
   height: 255px;
   display: flex;
   justify-content: center;
-  background-image: url('/assets/p-logo.webp');
-  background-size: cover;
-  background-position: center;
+  background: url('/assets/p-logo.webp') center/cover no-repeat;
   border-radius: 12px;
   margin-bottom: 20px;
 }
 
-.screen.active {
-  display: flex;
-}
-
-/* === TITLES & TEXT === */
-h1, h2 {
-  font-weight: 700;
+/* === TYPOGRAPHY === */
+h1, h2, p {
   font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;
 }
 
-
 h1 {
   font-size: 24px;
+  font-weight: 700;
   text-align: center;
 }
 
+h2 {
+  font-weight: 700;
+}
 
 .question-slide h2 {
   font-size: 15px;
@@ -68,19 +66,21 @@ h1 {
   font-weight: 500;
 }
 
-.question-slide > p {
-  font-size: 17px;
-}
-
 p {
-  font-family: "Plus Jakarta Sans", "Noto Sans", sans-serif;
-  font-weight: 500;
   font-size: 16px;
+  font-weight: 500;
   text-align: left;
 }
 
 #screen-onboarding p {
   text-align: center;
+}
+
+.question-slide > p {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  text-align: left;
 }
 
 /* === BUTTONS === */
@@ -107,11 +107,12 @@ button:active {
   transform: scale(0.98);
 }
 
-/* === "Next" Button Full Width === */
 #next-btn {
   width: 100%;
-  padding: 1rem;
-  font-size: 18px;
+  padding: 14px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
 }
 
 #next-btn:disabled {
@@ -121,7 +122,7 @@ button:active {
   border-color: #555;
 }
 
-/* === Answer Buttons (Radio Options) === */
+/* === OPTIONS === */
 .options {
   display: flex;
   flex-direction: column;
@@ -132,12 +133,14 @@ button:active {
 .answer-option {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 12px 16px;
   border: 1px solid #4f404d;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  font-weight: 500;
 }
 
 .answer-option:hover {
@@ -147,9 +150,9 @@ button:active {
 .answer-option.selected {
   border-color: white;
   background-color: rgba(214, 135, 209, 0.1);
+  font-weight: 600;
 }
 
-/* Hidden radio input */
 .answer-option input[type="radio"] {
   position: absolute;
   opacity: 0;
@@ -157,17 +160,16 @@ button:active {
   height: 0;
 }
 
-/* Custom Radio Dot */
 .radio-custom {
   width: 20px;
   height: 20px;
   border: 2px solid #4f404d;
   border-radius: 50%;
-  display: inline-block;
-  margin-right: 12px;
-  position: relative;
+  margin-left: 12px;
   flex-shrink: 0;
+  position: relative;
   transition: border-color 0.2s ease;
+  order: 2;
 }
 
 .answer-option.selected .radio-custom {
@@ -186,31 +188,105 @@ button:active {
   transform: translate(-50%, -50%);
 }
 
-/* Answer Text */
 .answer-text {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: white;
   flex: 1;
+  order: 1;
+  text-align: left;
 }
 
-/* === FINAL SCREEN / RESULT PAGE === */
+/* === QUESTION SLIDE === */
+.question-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 300px;
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(0.32, 0.72, 0, 1);
+  pointer-events: none;
+  opacity: 1;
+}
+
+.question-slide.animate-in {
+  transform: translateX(0);
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.question-counter {
+  font-size: 15px;
+  font-weight: 500;
+  color: #B2A3B2;
+  text-align: end;
+  margin-bottom: 20px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+
+.question-actions {
+  position: relative;
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+  pointer-events: auto !important;
+}
+
+/* === SCREEN QUIZ === */
+#screen-quiz {
+  position: relative;
+  min-height: 700px;
+  overflow: hidden;
+  border-radius: 12px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* === RESULT SCREEN === */
 .result-screen {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-/* Contact Input & Button Group */
+.result-screen h2 {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 24px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #D687D1;
+}
+
+.result-screen > p {
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.result-screen > div > p {
+  text-align: center;
+}
+
+.result-screen > button {
+  width: 30%;
+  height: 48px;
+  align-self: end;
+  border-radius: 0 12px 12px 0;
+  margin-top: -72px !important;
+}
+
+/* === CONTACT INPUT === */
 #contact-input,
 #save-contact-btn {
   height: 48px;
-  margin: 0;
   padding: 0.75rem;
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 500;
   font-size: 16px;
+  margin: 0;
 }
 
 #contact-input {
@@ -220,6 +296,8 @@ button:active {
   border-radius: 12px 0 0 12px;
   flex: 1;
   outline: none;
+  width: 70%;
+  margin-top: 20px;
 }
 
 #contact-input:focus {
@@ -239,7 +317,7 @@ button:active {
   border-color: #c76db8;
 }
 
-/* Final Actions: Dashboard & Restart */
+/* === FINAL ACTIONS === */
 .final-actions {
   display: flex;
   flex-direction: column;
@@ -258,128 +336,11 @@ button:active {
   border-color: #777;
 }
 
-/* === ADMIN DASHBOARD STYLES (Placeholder - We'll style next) === */
-#answers-list {
-  margin: 1rem 0;
-  font-size: 14px;
-}
-
-.admin-entry {
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid #4f404d;
-}
-
-.admin-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: -60px;
-}
-
-#exit-admin-btn {
-  background-color: #362B33;
-  color: white;
-  border: 1px solid #555;
-}
-
-/* === 1. Move radio to the right, text on left === */
-.answer-option {
-  justify-content: space-between;
-}
-
-.answer-option .answer-text {
-  flex: 1;
-  text-align: left;
-  order: 1;
-}
-
-.answer-option .radio-custom {
-  order: 2;
-  margin-right: 0;
-  margin-left: 12px;
-}
-
-/* === 2. Make selected answer slightly bolder === */
-.answer-option.selected {
-  font-weight: 600;
-}
-
-/* === 3. Next button: smaller text, more gap from answers === */
-#next-btn {
-  font-size: 16px;
-  padding: 12px 16px;
-  margin-top: 40px; /* Big gap between answers and button */
-}
-
-/* === 4. More space between question and answers === */
-.question-slide > p {
-  margin-bottom: 32px;
-}
-
-.question-slide p {
-  font-weight: 600;
-  font-size: 18px;
-}
-
-/* === 6. Add 1/20 counter in top-right corner === */
-.question-slide {
-  position: relative;
-  min-height: 100px;
-}
-
-.question-counter {
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  color: #B2A3B2;
-  background: rgba(214, 135, 209, 0.1);
-  padding: 4px 12px;
-  border-radius: 12px;
-  border: 1px solid #4f404d;
-}
-
-/* === 7. Result Screen: Add "Patterns" Logo at Top === */
-.result-screen h2 {
-  display: flex;
-  justify-content: center;
-  margin-top: 40px;
-  margin-bottom: 24px;
-  font-size: 18px;
-  font-weight: 700;
-  color: #D687D1;
-}
-
-#contact-input {
-  width: 70%;
-  margin-top: 20px;
-}
-
-.result-screen >p {
-  font-size: 20px;
-  font-weight: 700;
-  text-align: center;
-}
-
-.result-screen > div > p {
-  text-align: center;
-}
-
-.result-screen >button {
-  width: 30%;
-  margin-top: -72px !important;
-  border-radius: 0px 12px 12px 0;
-  height: 48px;
-  align-self: end;
-  margin-top: 0;
-}
-
-.final-actions :nth-child(2){
+.final-actions :nth-child(2) {
   margin-top: 5px !important;
 }
 
+/* === ADMIN === */
 #admin-screen {
   overflow: hidden;
   margin-bottom: 30px;
@@ -393,11 +354,14 @@ button:active {
 
 #answers-list {
   padding: 16px 0;
+  margin: 1rem 0;
+  font-size: 14px;
 }
 
 .admin-entry {
   margin-bottom: 24px;
-  padding: 0px 5px 24px;
+  padding: 0 5px 24px;
+  border-bottom: 1px solid #4f404d;
 }
 
 .admin-entry strong {
@@ -422,6 +386,7 @@ button:active {
   flex-direction: column;
   gap: 12px;
   padding: 16px;
+  margin-top: -60px;
 }
 
 #exit-admin-btn {

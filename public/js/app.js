@@ -71,87 +71,111 @@ function showQuestion(index) {
   const q = questions[index];
   selectedAnswer = null;
 
-  quizContainer.innerHTML = '';
-  const questionDiv = document.createElement('div');
-  questionDiv.className = 'question-slide';
+  // Animate out current content
+  const current = quizContainer.querySelector('.question-slide');
+  if (current) {
+    current.style.opacity = '0';
+    current.style.transform = 'translateX(-30px)';
+    current.classList.remove('animate-in');
+  }
 
-  const title = document.createElement('h2');
-  title.textContent = `${index + 1}/20`;
-  questionDiv.appendChild(title);
+  setTimeout(() => {
+    quizContainer.innerHTML = '';
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question-slide';
 
-  const text = document.createElement('p');
-  text.textContent = q.text;
-  questionDiv.appendChild(text);
+    // ✅ Add 1/20 counter
+    const counter = document.createElement('div');
+    counter.className = 'question-counter';
+    counter.textContent = `${index + 1}/20`;
+    questionDiv.appendChild(counter);
 
-  const optionsContainer = document.createElement('div');
-  optionsContainer.className = 'options';
+    // ✅ Question text
+    const text = document.createElement('p');
+    text.textContent = q.text;
+    questionDiv.appendChild(text);
 
-  const shuffledOptions = shuffleArray([...q.options]);
-  const radioName = `q-${index}`;
+    // ✅ Answers container
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'options';
 
-  shuffledOptions.forEach(opt => {
-    const label = document.createElement('label');
-    label.className = 'answer-option';
+    const shuffledOptions = shuffleArray([...q.options]);
+    const radioName = `q-${index}`;
 
-    const radio = document.createElement('input');
-    radio.type = 'radio';
-    radio.name = radioName;
-    radio.dataset.score = opt.score;
-    radio.dataset.text = opt.text;
+    shuffledOptions.forEach(opt => {
+      const label = document.createElement('label');
+      label.className = 'answer-option';
 
-    const radioDot = document.createElement('span');
-    radioDot.className = 'radio-custom';
+      const radio = document.createElement('input');
+      radio.type = 'radio';
+      radio.name = radioName;
+      radio.dataset.score = opt.score;
+      radio.dataset.text = opt.text;
 
-    const textSpan = document.createElement('span');
-    textSpan.textContent = opt.text;
-    textSpan.className = 'answer-text';
+      const radioDot = document.createElement('span');
+      radioDot.className = 'radio-custom';
 
-    label.appendChild(radio);
-    label.appendChild(radioDot);
-    label.appendChild(textSpan);
+      const textSpan = document.createElement('span');
+      textSpan.textContent = opt.text;
+      textSpan.className = 'answer-text';
 
-    radio.addEventListener('change', () => {
-      if (radio.checked) {
-        document.querySelectorAll('.answer-option').forEach(el => el.classList.remove('selected'));
-        label.classList.add('selected');
-        selectedAnswer = { text: opt.text, score: opt.score };
+      label.appendChild(radio);
+      label.appendChild(radioDot);
+      label.appendChild(textSpan);
 
-        const nextBtn = document.getElementById('next-btn');
-        if (nextBtn) {
-          nextBtn.disabled = false;
-          nextBtn.style.opacity = '1';
-          nextBtn.style.cursor = 'pointer';
+      radio.addEventListener('change', () => {
+        if (radio.checked) {
+          document.querySelectorAll('.answer-option').forEach(el => el.classList.remove('selected'));
+          label.classList.add('selected');
+          selectedAnswer = { text: opt.text, score: opt.score };
+
+          const nextBtn = document.getElementById('next-btn');
+          if (nextBtn) {
+            nextBtn.disabled = false;
+            nextBtn.style.opacity = '1';
+            nextBtn.style.cursor = 'pointer';
+          }
         }
+      });
+
+      optionsContainer.appendChild(label);
+    });
+
+    questionDiv.appendChild(optionsContainer);
+
+    // ✅ Action buttons
+    const actions = document.createElement('div');
+    actions.className = 'question-actions';
+
+    const nextBtn = document.createElement('button');
+    nextBtn.textContent = 'Next';
+    nextBtn.id = 'next-btn';
+    nextBtn.disabled = true;
+    nextBtn.style.opacity = '0.5';
+    nextBtn.style.cursor = 'not-allowed';
+
+    nextBtn.addEventListener('click', () => {
+      if (selectedAnswer) {
+        userAnswers.push({ 
+          question: q.text, 
+          answer: selectedAnswer.text, 
+          score: selectedAnswer.score 
+        });
+        totalScore += selectedAnswer.score;
+        currentQuestionIndex++;
+        showQuestion(currentQuestionIndex);
       }
     });
 
-    optionsContainer.appendChild(label);
-  });
+    actions.appendChild(nextBtn);
+    questionDiv.appendChild(actions);
+    quizContainer.appendChild(questionDiv);
 
-  questionDiv.appendChild(optionsContainer);
-
-  const actions = document.createElement('div');
-  actions.className = 'question-actions';
-
-  const nextBtn = document.createElement('button');
-  nextBtn.textContent = 'Next';
-  nextBtn.id = 'next-btn';
-  nextBtn.disabled = true;
-  nextBtn.style.opacity = '0.5';
-  nextBtn.style.cursor = 'not-allowed';
-
-  nextBtn.addEventListener('click', () => {
-    if (selectedAnswer) {
-      userAnswers.push({ question: q.text, answer: selectedAnswer.text, score: selectedAnswer.score });
-      totalScore += selectedAnswer.score;
-      currentQuestionIndex++;
-      showQuestion(currentQuestionIndex);
-    }
-  });
-
-  actions.appendChild(nextBtn);
-  questionDiv.appendChild(actions);
-  quizContainer.appendChild(questionDiv);
+    // ✅ Trigger slide-in animation
+    setTimeout(() => {
+      questionDiv.classList.add('animate-in');
+    }, 50);
+  }, 10); // Short delay to allow exit animation
 }
 
 // ============ FINISH QUIZ ============
@@ -177,7 +201,7 @@ function finishQuiz() {
 if (percent >= 75) {
   const contactSection = document.createElement('div');
   contactSection.innerHTML = `
-    <p>Looks like a strong match! Want to connect?</p>
+    <p>Looks like a strong match!</p> Want to connect?</p>
       <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
   `;
 
