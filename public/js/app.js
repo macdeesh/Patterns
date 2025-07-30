@@ -167,20 +167,23 @@ function finishQuiz() {
   messageEl.textContent = getCompatibilityMessage(percent);
   resultDiv.appendChild(messageEl);
 
-  // Contact input (if high compatibility)
+  // Contact input (only if high compatibility)
   if (percent >= 75) {
     const contactSection = document.createElement('div');
     contactSection.innerHTML = `
       <p>Looks like a strong match! Want to connect?</p>
       <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
-      <button id="save-contact-btn">Save Contact</button>
     `;
     resultDiv.appendChild(contactSection);
 
-    // ✅ Wait for button to be in DOM, then attach event
-    const saveBtn = document.getElementById('save-contact-btn');
+    const contactInput = document.getElementById('contact-input');
+
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = 'Save Contact';
+
+    // ✅ Safe event listener: no reliance on getElementById after innerHTML
     saveBtn.addEventListener('click', () => {
-      const contact = document.getElementById('contact-input').value.trim();
+      const contact = contactInput.value.trim();
       if (!contact) return alert('Please enter your contact.');
 
       const entry = {
@@ -191,7 +194,11 @@ function finishQuiz() {
       };
 
       saveAnswer(entry)
-        .then(res => res.json().catch(() => ({})))
+        .then(res => {
+          // Handle non-JSON responses gracefully
+          const contentType = res.headers.get('content-type');
+          return contentType && contentType.includes('application/json') ? res.json() : {};
+        })
         .then(data => {
           if (data.success !== false) {
             alert('Contact saved!');
@@ -201,15 +208,20 @@ function finishQuiz() {
             alert('Failed to save.');
           }
         })
-        .catch(() => alert('Error saving.'));
+        .catch(err => {
+          console.error('Save error:', err);
+          alert('Error saving. Please try again.');
+        });
     });
+
+    resultDiv.appendChild(saveBtn);
   }
 
-  // Final buttons
+  // Final buttons container
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'final-actions';
 
-  // ✅ Both buttons now password-protected
+  // ✅ Restart Quiz protected by password
   const restartBtn = document.createElement('button');
   restartBtn.textContent = 'Restart Quiz';
   restartBtn.addEventListener('click', () => {
@@ -221,6 +233,7 @@ function finishQuiz() {
     }
   });
 
+  // ✅ Admin Dashboard protected by password
   const dashboardBtn = document.createElement('button');
   dashboardBtn.textContent = 'Admin Dashboard';
   dashboardBtn.addEventListener('click', () => {
