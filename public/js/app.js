@@ -201,8 +201,8 @@ function finishQuiz() {
 if (percent >= 75) {
   const contactSection = document.createElement('div');
   contactSection.innerHTML = `
-    <p>Looks like a strong match!</p> Want to connect?</p>
-      <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
+    <p>Looks like a strong match!Want to connect?</p>
+      <input type="text" placeholder="Your contact.." id="contact-input" />
   `;
 
   const contactInput = contactSection.querySelector('#contact-input');
@@ -225,7 +225,7 @@ if (percent >= 75) {
 
     // ✅ Create and append success message
     const successMsg = document.createElement('p');
-    successMsg.textContent = 'Thank you, your contact is saved.';
+    successMsg.textContent = 'Thank you! Contact saved.';
     successMsg.style.fontWeight = '500';
     successMsg.style.color = '#00a4ff';
     successMsg.style.marginTop = '16px';
@@ -244,7 +244,7 @@ if (percent >= 75) {
   const restartBtn = document.createElement('button');
   restartBtn.textContent = 'Restart Quiz';
   restartBtn.addEventListener('click', () => {
-    const pass = prompt('Enter password to restart:');
+    const pass = prompt('Enter password:');
     if (pass === 'karim') {
       location.reload();
     } else {
