@@ -76,7 +76,7 @@ function showQuestion(index) {
   questionDiv.className = 'question-slide';
 
   const title = document.createElement('h2');
-  title.textContent = `Question ${index + 1}`;
+  title.textContent = `${index + 1}/20`;
   questionDiv.appendChild(title);
 
   const text = document.createElement('p');
@@ -173,20 +173,20 @@ function finishQuiz() {
   resultDiv.appendChild(messageEl);
 
   
-  // Contact input (only if high compatibility)
 // Contact input (only if high compatibility)
 if (percent >= 75) {
   const contactSection = document.createElement('div');
   contactSection.innerHTML = `
     <p>Looks like a strong match! Want to connect?</p>
-    <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
+      <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
   `;
-  resultDiv.appendChild(contactSection);
 
   const contactInput = contactSection.querySelector('#contact-input');
 
   const saveBtn = document.createElement('button');
-  saveBtn.textContent = 'Save Contact';
+  saveBtn.textContent = 'Save';
+
+  resultDiv.appendChild(contactSection);
 
   saveBtn.addEventListener('click', () => {
     const contact = contactInput.value.trim();
@@ -201,10 +201,11 @@ if (percent >= 75) {
 
     // ✅ Create and append success message
     const successMsg = document.createElement('p');
-    successMsg.textContent = 'Thank you, your contact is saved. ✅';
+    successMsg.textContent = 'Thank you, your contact is saved.';
     successMsg.style.fontWeight = '500';
-    successMsg.style.color = '#2e7d32';
+    successMsg.style.color = '#00a4ff';
     successMsg.style.marginTop = '16px';
+    successMsg.style.textAlign = 'center';
     contactSection.appendChild(successMsg);
   });
 
@@ -228,7 +229,7 @@ if (percent >= 75) {
   });
 
   const dashboardBtn = document.createElement('button');
-  dashboardBtn.textContent = 'Admin Dashboard';
+  dashboardBtn.textContent = 'Dashboard';
   dashboardBtn.addEventListener('click', () => {
     const pass = prompt('Enter password:');
     if (pass === 'karim') {
@@ -270,7 +271,9 @@ function showAdminDashboard() {
     <p><strong>Compatibility:</strong> ${Math.round((totalScore / (questions.length * 5)) * 100)}%</p>
     ${userContact ? `<p><strong>Contact:</strong> ${userContact}</p>` : ''}
     <div id="answers-list">
-      <p><strong>You answered ${userAnswers.length} questions:</strong></p>
+      <p><strong>Answers:</strong></p>
+      <br>
+      <br>
     </div>
     <div class="admin-actions">
       <button id="exit-admin-btn">Exit</button>
@@ -285,9 +288,8 @@ function showAdminDashboard() {
     const item = document.createElement('div');
     item.className = 'admin-entry';
     item.innerHTML = `
-      <strong>Q${i + 1}:</strong> ${entry.question}<br>
-      <em>→ <strong>${entry.answer}</strong> (${entry.score} pts)</em>
-      <hr>
+      <strong>Q${i + 1}: ${entry.question}</strong><br>
+      <em>→ ${entry.answer} (${entry.score} pts)</em>
     `;
     list.appendChild(item);
   });
