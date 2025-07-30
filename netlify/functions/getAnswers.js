@@ -24,6 +24,8 @@ exports.handler = async function (event) {
   }
 
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+  console.log('🔍 GITHUB_TOKEN length:', GITHUB_TOKEN?.length);
+console.log('🔍 GITHUB_TOKEN first chars:', GITHUB_TOKEN ? GITHUB_TOKEN.substring(0, 6) : 'undefined');
   console.log('GITHUB_TOKEN set:', !!GITHUB_TOKEN); // Debug
 
   if (!GITHUB_TOKEN) {
