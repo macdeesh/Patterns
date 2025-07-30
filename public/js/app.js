@@ -172,39 +172,43 @@ function finishQuiz() {
   messageEl.textContent = getCompatibilityMessage(percent);
   resultDiv.appendChild(messageEl);
 
+  
   // Contact input (only if high compatibility)
-  if (percent >= 75) {
-    const contactSection = document.createElement('div');
-    contactSection.innerHTML = `
-      <p>Looks like a strong match! Want to connect?</p>
-      <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
-      <button id="save-contact-btn">Save Contact</button>
-    `;
-    resultDiv.appendChild(contactSection);
+if (percent >= 75) {
+  const contactSection = document.createElement('div');
+  contactSection.innerHTML = `
+    <p>Looks like a strong match! Want to connect?</p>
+    <input type="text" placeholder="Your Instagram or contact" id="contact-input" />
+  `;
+  resultDiv.appendChild(contactSection);
 
-    const contactInput = document.getElementById('contact-input');
-    const saveBtn = document.getElementById('save-contact-btn');
+  const contactInput = document.getElementById('contact-input');
 
-    saveBtn.addEventListener('click', () => {
-      const contact = contactInput.value.trim();
-      if (!contact) return alert('Please enter your contact.');
+  const saveBtn = document.createElement('button');
+  saveBtn.textContent = 'Save Contact';
 
-      // ✅ Save contact in memory only
-      userContact = contact;
+  saveBtn.addEventListener('click', () => {
+    const contact = contactInput.value.trim();
+    if (!contact) return alert('Please enter your contact.');
 
-      // ✅ Hide input and button
-      contactInput.style.display = 'none';
-      saveBtn.style.display = 'none';
+    // ✅ Save in memory
+    userContact = contact;
 
-      // ✅ Show success message
-      const successMsg = document.createElement('p');
-      successMsg.textContent = 'Thank you, your contact is saved. ✅';
-      successMsg.style.fontWeight = '500';
-      successMsg.style.color = '#2e7d32';
-      successMsg.style.marginTop = '16px';
-      contactSection.appendChild(successMsg);
-    });
-  }
+    // ✅ Hide input and button
+    contactInput.style.display = 'none';
+    saveBtn.style.display = 'none';
+
+    // ✅ Show success message
+    const successMsg = document.createElement('p');
+    successMsg.textContent = 'Thank you, your contact is saved. ✅';
+    successMsg.style.fontWeight = '500';
+    successMsg.style.color = '#2e7d32';
+    successMsg.style.marginTop = '16px';
+    contactSection.appendChild(successMsg);
+  });
+
+  resultDiv.appendChild(saveBtn);
+}
 
   // Final buttons
   const buttonContainer = document.createElement('div');
