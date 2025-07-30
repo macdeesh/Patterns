@@ -36,7 +36,7 @@ body {
   height: 255px;
   display: flex;
   justify-content: center;
-  background-image: url('/public/assets/p-logo.webp');
+  background-image: url('/assets/p-logo.webp');
   background-size: cover;
   background-position: center;
   border-radius: 12px;
