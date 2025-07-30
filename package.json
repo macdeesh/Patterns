@@ -1,7 +1,7 @@
 {
   "name": "patterns",
   "version": "1.0.0",
-  "description": "**Patterns** is a lightweight browser-based app designed to evaluate compatibility between two people, based on how one person (User B) answers a set of predefined questions created by another (User A).",
+  "description": "**Patterns** is a lightweight browser-based app...",
   "main": "index.js",
   "bin": {
     "patterns": "bin/script.js"
@@ -11,5 +11,8 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^20.0.0"
+  }
 }
