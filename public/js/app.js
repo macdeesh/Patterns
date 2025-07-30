@@ -183,7 +183,7 @@ if (percent >= 75) {
   `;
   resultDiv.appendChild(contactSection);
 
-  const contactInput = document.getElementById('contact-input');
+  const contactInput = contactSection.querySelector('#contact-input');
 
   const saveBtn = document.createElement('button');
   saveBtn.textContent = 'Save Contact';
