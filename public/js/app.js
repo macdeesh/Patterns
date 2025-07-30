@@ -222,18 +222,20 @@ function finishQuiz() {
         timestamp: new Date().toISOString()
       };
 
-      saveAnswer(entry).then(res => {
-        if (res.ok) {
-          alert('Contact saved!');
-          document.getElementById('save-contact-btn').disabled = true;
-          document.getElementById('save-contact-btn').textContent = 'Saved ✅';
-        } else {
-          alert('Failed to save. Try again.');
-        }
-      }).catch(err => {
-        console.error(err);
-        alert('Error saving.');
-      });
+      saveAnswer(entry)
+        .then(res => {
+          if (res.ok) {
+            alert('Contact saved!');
+            document.getElementById('save-contact-btn').disabled = true;
+            document.getElementById('save-contact-btn').textContent = 'Saved ✅';
+          } else {
+            alert('Failed to save. Try again.');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          alert('Error saving.');
+        });
     });
   }
 
