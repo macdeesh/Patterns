@@ -2,7 +2,7 @@
 let questions = [];
 let currentQuestionIndex = 0;
 let totalScore = 0;
-let userAnswers = []; // Store selected answer text and score
+let userAnswers = [];
 let selectedAnswer = null;
 
 // ============ DOM ELEMENTS ============
@@ -30,23 +30,13 @@ function startQuiz() {
 async function loadQuestions() {
   try {
     const res = await fetch('data/questions.json');
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
-    }
-
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
     const data = await res.json();
-    console.log('Loaded questions.json:', data); // Debug: check structure
 
-    // Find the "Main Questions" category
+    // ✅ Find "Main Questions" in categories array
     const category = data.categories?.find(cat => cat.title === "Main Questions");
-
-    if (!category) {
-      throw new Error(`Category "Main Questions" not found. Available categories: ${data.categories?.map(c => c.title).join(', ') || 'None'}`);
-    }
-
-    if (!Array.isArray(category.questions) || category.questions.length === 0) {
-      throw new Error('No questions found in "Main Questions"');
+    if (!category || !Array.isArray(category.questions)) {
+      throw new Error('Main Questions category not found or invalid format');
     }
 
     questions = category.questions;
@@ -54,10 +44,19 @@ async function loadQuestions() {
   } catch (err) {
     console.error('Failed to load questions:', err);
     quizContainer.innerHTML = `
-      <p class="config-placeholder">Error loading questions: <strong>${err.message}</strong></p>
+      <p class="config-placeholder">Error: ${err.message}</p>
       <button onclick="location.reload()">Try Again</button>
     `;
   }
+}
+
+// ============ SHUFFLE HELPER ============
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
 }
 
 // ============ SHOW QUESTION ============
@@ -65,14 +64,12 @@ function showQuestion(index) {
   if (index >= questions.length) return finishQuiz();
 
   const q = questions[index];
-  selectedAnswer = null; // Reset
+  selectedAnswer = null;
 
   quizContainer.innerHTML = '';
-
   const questionDiv = document.createElement('div');
   questionDiv.className = 'question-slide';
 
-  // Question header
   const title = document.createElement('h2');
   title.textContent = `Question ${index + 1}`;
   questionDiv.appendChild(title);
@@ -81,56 +78,39 @@ function showQuestion(index) {
   text.textContent = q.text;
   questionDiv.appendChild(text);
 
-  // Answers container
   const optionsContainer = document.createElement('div');
   optionsContainer.className = 'options';
 
-  // Shuffle answers
   const shuffledOptions = shuffleArray([...q.options]);
+  const radioName = `q-${index}`;
 
-  // Unique name per question
-  const radioName = `question-${index}`;
+  shuffledOptions.forEach(opt => {
+    const label = document.createElement('label');
+    label.className = 'answer-option';
 
-  shuffledOptions.forEach((opt, i) => {
-    // Wrapper for each option
-    const optionEl = document.createElement('label');
-    optionEl.className = 'answer-option';
-
-    // Hidden radio input
     const radio = document.createElement('input');
     radio.type = 'radio';
     radio.name = radioName;
-    radio.value = i;
     radio.dataset.score = opt.score;
     radio.dataset.text = opt.text;
 
-    // Visible custom dot
-    const radioDisplay = document.createElement('span');
-    radioDisplay.className = 'radio-custom';
+    const radioDot = document.createElement('span');
+    radioDot.className = 'radio-custom';
 
-    // Answer text
     const textSpan = document.createElement('span');
     textSpan.textContent = opt.text;
     textSpan.className = 'answer-text';
 
-    // Append
-    optionEl.appendChild(radio);
-    optionEl.appendChild(radioDisplay);
-    optionEl.appendChild(textSpan);
+    label.appendChild(radio);
+    label.appendChild(radioDot);
+    label.appendChild(textSpan);
 
-    // On selection
     radio.addEventListener('change', () => {
       if (radio.checked) {
-        // Update visual state
-        document.querySelectorAll('.answer-option').forEach(el => {
-          el.classList.remove('selected');
-        });
-        optionEl.classList.add('selected');
-
-        // Store selection
+        document.querySelectorAll('.answer-option').forEach(el => el.classList.remove('selected'));
+        label.classList.add('selected');
         selectedAnswer = { text: opt.text, score: opt.score };
 
-        // Enable Next button
         const nextBtn = document.getElementById('next-btn');
         if (nextBtn) {
           nextBtn.disabled = false;
@@ -140,12 +120,11 @@ function showQuestion(index) {
       }
     });
 
-    optionsContainer.appendChild(optionEl);
+    optionsContainer.appendChild(label);
   });
 
   questionDiv.appendChild(optionsContainer);
 
-  // Action buttons
   const actions = document.createElement('div');
   actions.className = 'question-actions';
 
@@ -158,11 +137,7 @@ function showQuestion(index) {
 
   nextBtn.addEventListener('click', () => {
     if (selectedAnswer) {
-      userAnswers.push({
-        question: q.text,
-        answer: selectedAnswer.text,
-        score: selectedAnswer.score
-      });
+      userAnswers.push({ question: q.text, answer: selectedAnswer.text, score: selectedAnswer.score });
       totalScore += selectedAnswer.score;
       currentQuestionIndex++;
       showQuestion(currentQuestionIndex);
@@ -172,15 +147,6 @@ function showQuestion(index) {
   actions.appendChild(nextBtn);
   questionDiv.appendChild(actions);
   quizContainer.appendChild(questionDiv);
-}
-
-// ============ SHUFFLE HELPER ============
-function shuffleArray(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
 }
 
 // ============ FINISH QUIZ ============
@@ -201,7 +167,7 @@ function finishQuiz() {
   messageEl.textContent = getCompatibilityMessage(percent);
   resultDiv.appendChild(messageEl);
 
-  // Contact input (only if high compatibility)
+  // Contact input (if high compatibility)
   if (percent >= 75) {
     const contactSection = document.createElement('div');
     contactSection.innerHTML = `
@@ -211,7 +177,9 @@ function finishQuiz() {
     `;
     resultDiv.appendChild(contactSection);
 
-    document.getElementById('save-contact-btn').addEventListener('click', () => {
+    // ✅ Wait for button to be in DOM, then attach event
+    const saveBtn = document.getElementById('save-contact-btn');
+    saveBtn.addEventListener('click', () => {
       const contact = document.getElementById('contact-input').value.trim();
       if (!contact) return alert('Please enter your contact.');
 
@@ -223,19 +191,17 @@ function finishQuiz() {
       };
 
       saveAnswer(entry)
-        .then(res => {
-          if (res.ok) {
+        .then(res => res.json().catch(() => ({})))
+        .then(data => {
+          if (data.success !== false) {
             alert('Contact saved!');
-            document.getElementById('save-contact-btn').disabled = true;
-            document.getElementById('save-contact-btn').textContent = 'Saved ✅';
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saved ✅';
           } else {
-            alert('Failed to save. Try again.');
+            alert('Failed to save.');
           }
         })
-        .catch(err => {
-          console.error(err);
-          alert('Error saving.');
-        });
+        .catch(() => alert('Error saving.'));
     });
   }
 
@@ -243,11 +209,15 @@ function finishQuiz() {
   const buttonContainer = document.createElement('div');
   buttonContainer.className = 'final-actions';
 
+  // ✅ Both buttons now password-protected
   const restartBtn = document.createElement('button');
   restartBtn.textContent = 'Restart Quiz';
   restartBtn.addEventListener('click', () => {
-    if (confirm('Restart the quiz?')) {
+    const pass = prompt('Enter password to restart:');
+    if (pass === 'karim') {
       location.reload();
+    } else {
+      alert('Incorrect password.');
     }
   });
 
@@ -265,7 +235,6 @@ function finishQuiz() {
   buttonContainer.appendChild(restartBtn);
   buttonContainer.appendChild(dashboardBtn);
   resultDiv.appendChild(buttonContainer);
-
   quizContainer.appendChild(resultDiv);
 }
 
@@ -295,8 +264,6 @@ async function fetchAnswers() {
 // ============ ADMIN DASHBOARD ============
 async function showAdminDashboard() {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  
-  // Remove any existing admin screen
   const existing = document.getElementById('admin-screen');
   if (existing) existing.remove();
 
@@ -322,45 +289,35 @@ async function showAdminDashboard() {
       list.innerHTML = '<p>No responses saved yet.</p>';
     } else {
       data.answers.forEach((entry, i) => {
-        const entryEl = document.createElement('div');
-        entryEl.className = 'admin-entry';
-
+        const el = document.createElement('div');
+        el.className = 'admin-entry';
         let answersHtml = '';
         entry.answers.forEach(ans => {
-          answersHtml += `
-            <li><strong>${truncate(ans.question, 60)}</strong><br>→ ${ans.answer} <em>(${ans.score} pts)</em></li>
-          `;
+          answersHtml += `<li><strong>${truncate(ans.question, 60)}</strong><br>→ ${ans.answer} (${ans.score} pts)</li>`;
         });
-
-        entryEl.innerHTML = `
-          <h4>Response #${i + 1} – ${entry.compatibility}%</h4>
+        el.innerHTML = `
+          <h4>Entry #${i + 1} – ${entry.compatibility}%</h4>
           <p><strong>Contact:</strong> ${entry.contact || 'N/A'}</p>
           <p><strong>Date:</strong> ${new Date(entry.timestamp).toLocaleString()}</p>
-          <details>
-            <summary>View Full Answers</summary>
-            <ol>${answersHtml}</ol>
-          </details>
+          <details><summary>View Answers</summary><ol>${answersHtml}</ol></details>
           <hr>
         `;
-        list.appendChild(entryEl);
+        list.appendChild(el);
       });
     }
   } catch (err) {
-    list.innerHTML = '<p>Error loading data. Check console.</p>';
+    list.innerHTML = '<p>Error loading data.</p>';
     console.error(err);
   }
 
   document.getElementById('delete-data-btn').addEventListener('click', async () => {
     if (confirm('Erase all responses?')) {
       try {
-        await fetch('/api/deleteAnswers?password=<PASSWORD>', {
-          method: 'DELETE'
-        });
+        await fetch('/api/deleteAnswers?password=<PASSWORD>', { method: 'DELETE' });
         alert('All data erased.');
         location.reload();
       } catch (err) {
         alert('Delete failed.');
-        console.error(err);
       }
     }
   });
